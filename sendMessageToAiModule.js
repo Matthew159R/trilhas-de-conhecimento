@@ -1,8 +1,9 @@
+const getContext = require('./promptContext');
 const getPromptContextForTheAi = require('./promptContext');
 
-let getApiKey;
+let getApiKeyOpenai;
 try {
-    getApiKey = require('./apiKey');
+    getApiKeyOpenai = require('./apiKeys.json').openai;
 }catch (e) {
     console.error({
         error: "API KEY",
@@ -14,13 +15,13 @@ try {
 // Retorna uma reposta do chat gpt
 const sendMessageToChatGpt = async (userExpectation, contentWebSite) => {
 
-    const apiKeyChaGpt = getApiKey();
+    const apiKeyChaGpt = getApiKeyOpenai;
 
 
     const endpoint = "https://api.openai.com/v1/chat/completions";
 
     const input = [
-        { role: 'system', content: getPromptContextForTheAi() },
+        { role: 'system', content:  getContext()},
         { role: 'user', content: userExpectation },
         { role: 'user', content: contentWebSite }
     ];
@@ -39,8 +40,7 @@ const sendMessageToChatGpt = async (userExpectation, contentWebSite) => {
         });
 
         const data = await response.json();
-        const reponseModelAI = data.choices[0].message.content;
-        return reponseModelAI;
+        return responseModelAI = await data.error ? `Ocorreu um erro ao analisar esse site: ${JSON.stringify(data.error)}` : data.choices[0].message.content;
     } catch (error) {
         console.error("Erro na requisição:", error);
         throw error;

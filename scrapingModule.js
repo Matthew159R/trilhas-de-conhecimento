@@ -1,7 +1,6 @@
 const cheerio = require('cheerio');
 // Retorna todas as tags 'p' do site
-const contentWebSite = async tagName => {
-    const url = 'https://www.alura.com.br/artigos/o-que-e-json-web-tokens';
+const contentWebSite = async (tagName, url) => {
     const contentWebSite = [];
     await fetch(url)
         .then(reponse => reponse.text())
@@ -23,7 +22,7 @@ const contentWebSite = async tagName => {
                 const paragraphsInTagMain = mainContent.find('p').map((index, element) => {
                     return {
                         paragraphText: $(element).text().trim(),
-                        paragraphLength: $(element).length
+                        //paragraphLength: $(element).length
                     };
                 }).get();
 
